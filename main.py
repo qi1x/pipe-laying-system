@@ -7,7 +7,10 @@ from PyQt5.QtGui import QPixmap, QPen, QFont  # 从PyQt5库中导入QPixmap、QP
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QGraphicsView, QGraphicsScene, QGraphicsPixmapItem,
                              QVBoxLayout, QPushButton, QWidget, QHBoxLayout, QGraphicsLineItem, QGraphicsSimpleTextItem,
                              QGraphicsEllipseItem)  # 从PyQt5库中导入各种组件类
-from colorlog import ColoredFormatter  # 导入colorlog模块
+
+# 清空日志文件
+with open('application.log', 'w') as file:
+    file.write("")  # 将文件内容重置为空字符串
 
 # 创建一个日志记录器
 logger = logging.getLogger()
@@ -21,27 +24,19 @@ console_handler.setLevel(logging.INFO)
 file_handler = logging.FileHandler('application.log')
 file_handler.setLevel(logging.INFO)
 
-# 定义带颜色的日志记录格式
-color_formatter = ColoredFormatter(
-    "%(log_color)s%(asctime)s - %(log_color)s%(levelname)s - %(log_color)s%(message)s",
-    datefmt='%Y-%m-%d %H:%M:%S',
-    log_colors={
-        'DEBUG': 'green',
-        'INFO': 'cyan',
-        'WARNING': 'yellow',
-        'ERROR': 'red',
-        'CRITICAL': 'red,bg_yellow',
-    }
-)
 # 设置日志记录格式
-console_handler.setFormatter(color_formatter)
-file_handler.setFormatter(color_formatter)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(lineno)s : %(message)s",
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
 
 # 将处理程序添加到日志记录器
 logger.addHandler(console_handler)
 logger.addHandler(file_handler)
 
 coordinates = []  # 初始化坐标列表
+
 
 # 自定义Canvas类，继承自QGraphicsView类
 class Canvas(QGraphicsView):
@@ -65,6 +60,7 @@ class Canvas(QGraphicsView):
             coordinates.append((pos.x(), pos.y()))  # 将坐标添加到坐标列表中
             logger.info(f'已选坐标{coordinates}')  # 打印坐标列表
             logging.info(f"选择的点: x={pos.x()}, y={pos.y()}")
+
 
 # 自定义MainWindow类，继承自QMainWindow类
 class MainWindow(QMainWindow):
@@ -109,7 +105,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(bottom_navigation)  # 将底部导航栏添加到布局中
 
     # 清除生成树
-# 清除最小生成树
+    # 清除最小生成树
     def clear_tree(self):
         # 检查是否存在坐标数据
         if coordinates:
@@ -197,7 +193,6 @@ class MainWindow(QMainWindow):
             text = self.canvas.scene.addSimpleText(f"{weight * 200 / 115:.2f}m", QFont("Arial", 8))
             text.setPos((start_point[0] + end_point[0]) / 2, (start_point[1] + end_point[1]) / 2)
 
-
     # Kruskal算法实现
     def kruskal(self):
         edges = []  # 创建边列表
@@ -239,6 +234,7 @@ class MainWindow(QMainWindow):
         else:  # 如果等级相等
             parent[y_root] = x_root  # 将y的根节点设置为x的根节点
             rank[x_root] += 1  # 增加x的等级
+
 
 if __name__ == '__main__':
     logging.info("启动应用程序.")
