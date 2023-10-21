@@ -65,6 +65,7 @@ class Canvas(QGraphicsView):
 # 自定义MainWindow类，继承自QMainWindow类
 class MainWindow(QMainWindow):
     # MainWindow类的构造函数
+    # noinspection PyUnresolvedReferences
     def __init__(self):
         super().__init__()  # 调用父类的构造函数
 
@@ -104,7 +105,6 @@ class MainWindow(QMainWindow):
 
         layout.addWidget(bottom_navigation)  # 将底部导航栏添加到布局中
 
-    # 清除生成树
     # 清除最小生成树
     def clear_tree(self):
         # 检查是否存在坐标数据
