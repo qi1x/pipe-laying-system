@@ -100,7 +100,7 @@ class MainWindow(QMainWindow):
             lambda: self.calculate_minimum_spanning_tree('Kruskal'))  # 绑定“使用Kruskal算法计算”按钮的点击事件
 
         bottom_navigation.setLayout(bottom_navigation_layout)  # 设置底部导航栏布局
-        bottom_navigation.setFixedHeight(40)  # 设置底部导航栏高度
+        bottom_navigation.setFixedHeight(60)  # 设置底部导航栏高度
 
         layout.addWidget(bottom_navigation)  # 将底部导航栏添加到布局中
 
