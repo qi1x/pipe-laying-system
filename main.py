@@ -201,15 +201,15 @@ class MainWindow(QMainWindow):
                 dist = np.sqrt(  # 计算距离
                     (coordinates[i][0] - coordinates[j][0]) ** 2 + (coordinates[i][1] - coordinates[j][1]) ** 2)
                 edges.append((i, j, dist))  # 将结果添加到边列表
-        edges.sort(key=lambda x: x[2])  # 对边列表进行排序
+        edges.sort(key=lambda e: e[2])  # 对边列表进行排序
 
         parent = [i for i in range(len(coordinates))]  # 创建父节点列表
         rank = [0] * len(coordinates)  # 创建等级列表
         mst = []  # 创建最小生成树列表
         for edge in edges:  # 遍历边
             x, y, weight = edge  # 获取边的起点、终点和权重
-            x_root = self.find(parent, x)  # 获取x的根节点
-            y_root = self.find(parent, y)  # 获取y的根节点
+            x_root = self.find_(parent, x)  # 获取x的根节点
+            y_root = self.find_(parent, y)  # 获取y的根节点
             if x_root != y_root:  # 如果根节点不同
                 mst.append((x, y, weight))  # 将结果添加到最小生成树中
                 self.union(parent, rank, x_root, y_root)  # 进行合并操作
@@ -217,15 +217,15 @@ class MainWindow(QMainWindow):
         return mst  # 返回最小生成树
 
     # 查找函数
-    def find(self, parent, i):
+    def find_(self, parent, i):
         if parent[i] == i:  # 如果父节点就是自己
             return i  # 返回自己
-        return self.find(parent, parent[i])  # 递归查找父节点
+        return self.find_(parent, parent[i])  # 递归查找父节点
 
     # 合并函数
     def union(self, parent, rank, x, y):
-        x_root = self.find(parent, x)  # 获取x的根节点
-        y_root = self.find(parent, y)  # 获取y的根节点
+        x_root = self.find_(parent, x)  # 获取x的根节点
+        y_root = self.find_(parent, y)  # 获取y的根节点
 
         if rank[x_root] < rank[y_root]:  # 如果x的等级小于y的等级
             parent[x_root] = y_root  # 将x的根节点设置为y的根节点
